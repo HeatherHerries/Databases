@@ -1,0 +1,202 @@
+Exercises
+
+Use the commands above to complete the following tasks, and submit the SQL statements. 
+Real-world examples must be distinct from those used in the text.
+
+1. List the commands for adding, updating, and deleting data.
+
+  adding = INSERT INTO
+    Example: INSERT INTO products (id, name, price)
+  VALUES
+  (11773, 'South Face Jacket', 174.99),
+  (11774, 'Big Mountain 2-Person Tent', 219.99),
+  (11775, 'King Cole Camp Stove', 34.99),
+  (11776, 'Oregon Trail Mountain Bike', 579.99);
+
+  updating = UPDATE
+    Example: UPDATE products SET price=159.99 WHERE id=11773;
+
+  deleting = DELETE
+    Example: DELETE FROM products WHERE id=11776;
+
+
+2. Explain the structure for each type of command.
+
+  INSERT INTO
+    Example: INSERT INTO <tablename> (<columnName1>,<columnName2>,<columnName3>)
+    VALUES
+    (<column1Value>, <column2Value>, <column3Value>);
+
+  INSERT INTO specifies the action of adding.
+    It is then followed by the <tablename>
+    (<columnName1>,<columnName2>,<columnName3>) Specify which columns values should be added to.
+    VALUES is followed by what specific values are going to be added.
+
+
+  UPDATE
+    Example: UPDATE <tablename> SET <columnDescription>=<updatedValue> WHERE <row>;
+
+    UPDATE begins the command.
+    The <tablename> for the update is listed.
+    The columnDescription is stated with the value that the data will be updated to.
+    WHERE denotes which row the update will be happening.
+
+
+  DELETE
+    Example: DELETE FROM <tablename> WHERE <uniqueValue>;
+
+    DELETE begins the command.
+    FROM <tablename> states the table where the action should be performed.
+    WHERE specifics the row using an <uniqueValue>   It is always a good idea to use a column
+    with a unique value in the WHERE clause, or to specify multiple criteria. This is good practice
+    because otherwise you can accidentally delete other rows.
+
+3. What are some of the data types that can be used in tables? Give a real-world example 
+of each type.
+
+- String data types:  text   example: 'Assignment Name' (used in School for grades)
+
+- Number data types: integer or int  example: Students grades: 94, 88, 91
+
+- Date data types: datetime     example: Record the date and time when a student's grade was entered
+
+4. Decide how to create a new table to hold a list of people invited to a wedding dinner. 
+The table needs to have first and last names, whether they sent in their RSVP, the number 
+of guests they are bringing, and the number of meals (1 for adults and 1/2 for children).
+
+- Which data type would you use to store each of the following pieces of information?
+    - First and last name. - String
+    - Whether they sent in their RSVP. - Boolean
+    - Number of guests. - Integer
+    - Number of meals. - Numeric (float or decimal)
+
+- Write a command that creates the table to track the wedding dinner.
+
+        CREATE TABLE wedding (
+            firstName text,
+            lastName text,
+            RSVP text,
+            numberOfGuests integer,
+            mealNumber(3, 1)
+        );
+
+- Write a command that adds a column to track whether the guest sent a thank you card.
+
+        ALTER TABLE wedding ADD COLUMN thankYouCard text;
+
+- You have decided to move the data about the meals to another table, so write a command 
+to remove the column storing the number meals from the wedding table.
+
+        ALTER TABLE wedding DROP COLUMN mealNumber;
+
+- The guests will need a place to sit at the reception, so write a command that adds a 
+column for table number.
+
+        ALTER TABLE wedding ADD COLUMN tableNumber integer;
+
+- The wedding is over and we do not need to keep this information, so write a command 
+that deletes the table numbers from the database.
+
+        ALTER TABLE wedding DROP COLUMN tableNumber;
+
+5. Write a command to create a new table to hold the books in a library with the columns 
+ISBN, title, author, genre, publishing date, number of copies, and available copies.
+
+        CREATE TABLE library (
+            ISBN varchar,
+            title text,
+            author text,
+            genre text,
+            publishingDate date,
+            numberOfCopies integer,
+            availableCopies integer
+        );
+
+- Find three books and add their information to the table.
+
+        INSERT INTO library (ISBN, title, author, genre, publishingDate, numberOfCopies, availableCopies)
+        VALUES
+        (9780735219090, 'Where the Crawdads Sing', 'Delia Owens', 'Mystery', 2018-08-14, 4, 4),
+        (9781432850661, 'Then She Was Gone', 'Lisa Jewell', 'Thriller', 2017-07-27, 3, 2),
+        (9780718084225, 'The Hideaway', 'Lauren K. Denton', 'Romance', 2017-04-11, 2, 0);
+
+- Someone has just checked out one of the books. Change the number of available copies 
+to 1 fewer.
+
+        UPDATE library SET availableCopies = availableCopies WHERE ISBN= '9780735219090';
+
+- Now one of the books has been added to the banned books list. Remove it from the table.
+
+        DELETE FROM library WHERE ISBN= "9780718084225';
+
+6. Write a command to make a new table to hold spacecrafts. Information should include id, 
+name, year launched, country of origin, a brief description of the mission, orbiting body, 
+if it is currently operating, and its approximate miles from Earth. In addition to the 
+table creation, provide commands that perform the following operations:
+
+        CREATE TABLE spacecrafts (
+            id varchar,
+            name text,
+            yearLaunched integer,
+            country text,
+            mission text,
+            orbitingBody text,
+            operatingStatus text,
+            milesFromEarth bigint
+        );
+
+- Add three non-Earth-orbiting satellites to the table.
+
+        ('2001-014A', 'Mars Odyssey', 2001, 'USA', 'Map the surface of Mars', 'Mars', 'Active', 285000000),
+        ('1977-084A', 'Voyager 1', 1977, 'USA', 'Investigate Jupiter and Saturn', 'None: Currently interstellar space', 'Active', 13048795036),
+        ('2006-001A', New Horizons, 2006, 'USA', 'Investigate Pluto and Charon', 'Charon', 'Active', 4074330000);
+-Remove one of the satellites from the table since it has just crashed into the planet.
+
+        DELETE FROM spacecrafts WHERE id= '1977-084A';
+
+-Edit another satellite because it is no longer operating and change the value to reflect 
+that.
+
+        UPDATE spacecrafts SET operatingStatus= 'Inactive' WHERE id= '2001-014A';
+
+7. Write a command to create a new table to hold the emails in your inbox. This table 
+should include an id, the subject line, the sender, any additional recipients, the body 
+of the email, the timestamp, whether or not you have read the email, and the id of the 
+email chain it's in. Also provide commands that perform the following operations:
+
+CREATE TABLE email_inbox (
+    id varchar,
+    subject text,
+    sender varchar,
+    additionalRecipients varchar,
+    body text,
+    timeSent timestamp,
+    status text,
+    emailChainId varchar
+);
+
+-Add three new emails to the inbox.
+
+        INSERT INTO email_inbox (id, subject, sender, additionalRecipients, body, timeSent, status, emailChainId)
+        VALUES
+        ('100001', 'Community Clothing Drive', 'ccd@gmail.com', 'unknown', 'I need additional volunteers to help 
+        with our annual Community Clothng Drive. If you can help out that day it would be much appreciated. Lunch 
+        will be provided. Thank you.', '2019-05-05 06:32:49', 'read', 'https://mail.google.com/mail/u/0/?tab=wm#inbox/FMfcgxwCgVWtxVLJnLBcPbCcvhZsJmJD' );
+
+        ('100002', 'Appliance Repair', 'kenny@rockymtnappliance', 'unknown', 'I was able to finish the repair of your dryer. 
+        Everything seems to working properly at this point. There is a 30 day warranty on all repairs. Please let 
+        me know if I can be of service in any other way. Thanks, Kenny','2019-05-04 09:52:23', 'read','https://mail.google.com/mail/u/0/?tab=wm#search/bloc/FMfcgxwCgVWsjbwqkPBcwrtbwmsmWrJH' ),
+
+        ('100003', 'Power Outage', 'info@excelenergy.com', 'unknown', 'We regret to inform you that there is a local
+        power outage in you area. We assure you we are working quickly to resolve the problem and will report back to
+        you shortly when we have an estimated time of restoration.', '2019-02-17 10:06:53', 'https://mail.google.com/mail/u/0/?tab=wm#sent/FMfcgxwBVgsZwNJgvRqPFfvQNxfSdRpj');
+
+-You deleted one of the emails, so write a command to remove the row from the inbox 
+table.
+
+    DELETE FROM email_inbox WHERE id= '100001';
+
+-You started reading an email but just heard a crash in another room. Mark the email as 
+unread before investigating the crash, so you can come back and read it later.
+
+UPDATE email_inbox SET status= 'unread' WHERE id= '100002';
