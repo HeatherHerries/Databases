@@ -1,0 +1,344 @@
+Exercises
+Submit your answers to the following questions.
+
+NOTE: Real-world examples must be your own and not based on the text or previous 
+assignments.
+
+1. How do you find related data held in two separate data tables?
+
+You find related data held in two seperate data tables by using a JOIN clause.
+
+2. Explain, in your own words, the difference between an INNER JOIN, LEFT OUTER 
+JOIN, and RIGHT OUTER JOIN. Give a real-world example for each.
+
+INNER JOIN: Returns records that have matching values in both tables. 
+
+Example: 
+OrderID	   CustomerID	EmployeeID	  OrderDate	     ShipperID
+10308	   2		    7		      1996-09-18	 3
+10309	   37		    3		      1996-09-19	 1
+10310	   77		    8		      1996-09-20	 2
+
+CustomerID	    CustomerName				         ContactName					Address	City	                           PostalCode	Country
+1		        Alfreds Futterkiste			         Maria Anders	                Obere Str. 57 Berlin		               12209		Germany
+2		        Ana Trujillo Emparedados y helados   Ana Trujillo	                Avda. de la Constitución 2222 México D.F.  05021		Mexico
+3		        Antonio Moreno Taquería	             Antonio Moreno	                Mataderos 2312 México D.F.	               05023		Mexico
+
+SELECT Orders.OrderID, Customers.CustomerName
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID;
+
+Return:
+OrderID   CustomerName
+10308	  Ana Trujillo Emparedados y helados
+10309	  Hungry Owl All-Night Grocers
+10310	  The Big Cheese
+
+LEFT OUTER JOIN: Return all records from the left table, and the matched records from the right table.
+
+Example:
+CustomerID	         CustomerName				          ContactName		Address	City	                            PostalCode	       Country
+1		             Alfreds Futterkiste			      Maria Anders	    Obere Str. 57 Berlin		                12209		       Germany
+2		             Ana Trujillo Emparedados y helados	  Ana Trujillo	    Avda. de la Constitución 2222 México D.F.	05021		       Mexico
+3		             Antonio Moreno Taquería	          Antonio Moreno	Mataderos 2312 México D.F.	                05023		       Mexico
+
+
+OrderID	CustomerID	EmployeeID	OrderDate	ShipperID
+10308	2		    7		    1996-09-18	3
+10309	37		    3		    1996-09-19	1
+10310	77		    8		    1996-09-20	2
+
+SELECT Customers.CustomerName, Orders.OrderID
+FROM Customers
+LEFT JOIN Orders ON Customers.CustomerID = Orders.CustomerID
+ORDER BY Customers.CustomerName;
+
+Return:
+CustomerName	                       OrderID
+Ana Trujillo Emparedados y helados	    10308
+Hungry Owl All-Night Grocers	        10309
+The Big Cheese				            10310
+
+RIGHT OUTER JOIN: Return all records from the right table, and the matched records from the left table.
+
+Example:
+OrderID	CustomerID	EmployeeID	OrderDate	ShipperID
+10308	2		    7		    1996-09-18	3
+10309	37		    3		    1996-09-19	1
+10310	77		    8		    1996-09-20	2
+
+
+
+EmployeeID	LastName	FirstName	BirthDate	Photo
+1		    Davolio		Nancy		12/8/1968	EmpID1.pic
+2		    Fuller	    Andrew		2/19/1952	EmpID2.pic
+3		    Leverling	Janet		8/30/1963	EmpID3.pic
+
+SELECT Orders.OrderID, Employees.LastName, Employees.FirstName
+FROM Orders
+RIGHT JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID
+ORDER BY Orders.OrderID;
+
+Return:
+OrderID	LastName	FirstName
+10308 	King 		Robert 
+10309 	Leverling 	Janet 
+10310 	Callahan 	Laura 
+
+3. Define primary key and foreign key. Give a real-world example for each.
+
+Primary Key: uniquely identifies each record in a data base.
+
+Example: In the following example the ID is the the primary key and the unique identifier.
+
+CREATE TABLE person (
+    ID integer NOT NULL PRIMARY KEY,
+    LastName varchar(50) NOT NULL,
+    FirstName varchar(50) NOT NULL,
+    Age integer
+);
+
+Foriegn Key: is a key used to link two or more tables together.
+
+Example: In the following example the Foriegn Key is the PersonID.
+
+CREATE TABLE orders (
+    OrderID integer NOT NULL PRIMARY KEY,
+    OrderNumber integer NOT NULL,
+    PersonID integer NOT NULL FORIEGN KEY
+);
+
+4. Define aliasing.
+
+SQL aliases are used to give a table, or a column in a table, a temporary name. Aliases 
+are often used to make column names more readable.
+
+5. Change this query so that you are using aliasing:
+
+SELECT professor.name, compensation.salary,
+compensation.vacation_days FROM professor JOIN
+compensation ON professor.id =
+compensation.professor_id;
+
+SELECT professor.name, compensation.salary,
+compensation.vacation_days FROM professor as p
+JOIN compensation ON p.id =
+compensation.p_id;
+
+6. Why would you use a NATURAL JOIN? Give a real-world example.
+
+NATURAL JOIN is a shorthand form of USING. It forms a USING list consisting of only the column names that
+appear in both input tables. These columns appear only once in the output table.
+
+Example:
+
+It's time to print a students' report card and you need to combine columns and their data from the
+following tables.
+
+Table: student_info
+student_id, name, address, phone_number, parent_names
+
+Table: english
+student_id, name, english_grade
+
+Table: math
+student_id, name, math_grade
+
+
+
+A NATURAL JOIN would allow you to combine the unique columns of the above information for printing a
+student's report card.  There is no need to have the student's name and id on the report card multiple
+times.  You end up with all the unique column names and data needed.
+
+7. Using this Employee schema and data, write queries to find the following 
+information:
+
+    - List all employees and all shifts.
+
+    SELECT employees.name, shifts.date, shifts.start_time, shifts.end_time
+      FROM shifts
+      FULL JOIN scheduled_shifts ON shifts.id = scheduled_shifts.shift_id
+      FULL JOIN employees ON employees.id = scheduled_shifts.employee_id;
+
+    Return:
+        name        |    date    | start_time | end_time
+ --------------------+------------+------------+----------
+  Hermione Granger   | 1998-03-09 | 08:00:00   | 16:00:00
+  Hermione Granger   | 1998-03-10 | 08:00:00   | 16:00:00
+  Hermione Granger   | 1998-03-11 | 08:00:00   | 16:00:00
+  Hermione Granger   | 1998-03-12 | 08:00:00   | 16:00:00
+  Hermione Granger   | 1998-03-13 | 08:00:00   | 16:00:00
+  Ronald Weasley     | 1998-03-10 | 12:00:00   | 16:00:00
+  Ronald Weasley     | 1998-03-12 | 12:00:00   | 16:00:00
+  Luna Lovegood      | 1998-03-09 | 12:00:00   | 16:00:00
+  Luna Lovegood      | 1998-03-11 | 12:00:00   | 16:00:00
+  Luna Lovegood      | 1998-03-13 | 12:00:00   | 16:00:00
+  Draco Malfoy       | 1998-03-11 | 16:00:00   | 20:00:00
+  Draco Malfoy       | 1998-03-12 | 16:00:00   | 20:00:00
+  Draco Malfoy       | 1998-03-13 | 16:00:00   | 20:00:00
+  Padma Patil        | 1998-03-09 | 12:00:00   | 20:00:00
+  Padma Patil        | 1998-03-10 | 12:00:00   | 20:00:00
+  Padma Patil        | 1998-03-11 | 12:00:00   | 20:00:00
+  Padma Patil        | 1998-03-09 | 08:00:00   | 12:00:00
+  Padma Patil        | 1998-03-10 | 08:00:00   | 12:00:00
+  Padma Patil        | 1998-03-11 | 08:00:00   | 12:00:00
+  Cho Chang          | 1998-03-12 | 12:00:00   | 20:00:00
+  Cho Chang          | 1998-03-13 | 12:00:00   | 20:00:00
+  Dean Thomas        | 1998-03-09 | 16:00:00   | 20:00:00
+  Dean Thomas        | 1998-03-10 | 16:00:00   | 20:00:00
+                     | 1998-03-13 | 08:00:00   | 12:00:00
+                     | 1998-03-12 | 08:00:00   | 12:00:00
+  Neville Longbottom |            |            |
+  Cedric Diggory     |            |            |
+  S(27 rows)
+
+8. Using this Adoption schema and data, please write queries to retrieve the 
+following information and include the results:
+
+    - Create a list of all volunteers. If the volunteer is fostering a dog, 
+    include each dog as well.
+
+    SELECT volunteers.first_name, volunteers.last_name, dogs.name
+    FROM volunteers
+    LEFT JOIN dogs
+    ON volunteers.foster_dog_id = dogs.id;
+
+    | first_name | last_name  | name      |
+    | ---------- | ---------- | --------- |
+    | Rubeus     | Hagrid     | Munchkin  |
+    | Marjorie   | Dursley    | Marmaduke |
+    | Sirius     | Black      |           |
+    | Remus      | Lupin      |           |
+    | Albus      | Dumbledore |           |
+
+    ---
+
+
+    - The cat's name, adopter's name, and adopted date for each cat adopted 
+    within the past month to be displayed as part of the "Happy Tail" social 
+    media promotion which posts recent successful adoptions.
+
+    SELECT cats.name, adopters.first_name, adopters.last_name, cat_adoptions.date
+    FROM cats
+    JOIN cat_adoptions ON cats.id = cat_adoptions.cat_id
+    JOIN adopters ON adopters.id = cat_adoptions.adopter_id
+    WHERE cat_adoptions.date >= CURRENT_DATE - INTERVAL '1 Month';
+
+    | name     | first_name | last_name | date                     |
+    | -------- | ---------- | --------- | ------------------------ |
+    | Mushi    | Arabella   | Figg      | 2019-04-24T00:00:00.000Z |
+    | Victoire | Argus      | Filch     | 2019-04-29T00:00:00.000Z |
+
+    ---
+
+    - Create a list of adopters who have not yet chosen a dog to adopt.
+
+    SELECT adopters.id, adopters.first_name, adopters.last_name, adopters.address, adopters.phone_number
+    FROM adopters
+    JOIN dog_adoptions ON dog_adoptions.adopter_id != adopters.id;
+
+    | id  | first_name | last_name | address             | phone_number |
+    | --- | ---------- | --------- | ------------------- | ------------ |
+    | 1   | Hermione   | Granger   | 32 Granger's Street | 676-464-7837 |
+    | 2   | Arabella   | Figg      | 4 Wisteria Walk     | 843-228-5239 |
+
+    - Lists of all cats and all dogs who have not been adopted.
+
+    SELECT cats.name
+    FROM cats
+    LEFT OUTER JOIN cat_adoptions ON cats.id = cat_adoptions.cat_id
+    WHERE cat_adoptions.adopter_id IS NULL
+    UNION
+    SELECT dogs.name
+    FROM dogs
+    LEFT OUTER JOIN dog_adoptions ON dogs.id = dog_adoptions.dog_id
+    WHERE dog_adoptions.adopter_id IS NULL;
+
+    | name      |
+    | --------- |
+    | Lassie    |
+    | Boujee    |
+    | Marmaduke |
+    | Seashell  |
+    | Munchkin  |
+    | Nala      |
+    | Marley    |
+
+    - The name of the person who adopted Rosco.
+
+    SELECT adopters.first_name, adopters.last_name
+    FROM adopters
+    JOIN dog_adoptions ON dog_adoptions.adopter_id = adopters.id
+    JOIN dogs ON dogs.id = dog_adoptions.dog_id
+    WHERE dogs.name = 'Rosco';
+
+    | first_name | last_name |
+    | ---------- | --------- |
+    | Argus      | Filch     |
+
+    ---
+
+9. Using this Library schema and data, write queries applying the following 
+scenarios and include the results:
+
+    - To determine if the library should buy more copies of a given book, 
+    please provide the names and position, in order, of all of the patrons 
+    with a hold (request for a book with all copies checked out) on 
+    "Advanced Potion-Making".
+
+    SELECT p.name, h.rank
+    FROM patrons AS p
+    JOIN holds AS h ON h.patron_id = p.id
+    JOIN books AS b ON b.isbn = h.isbn
+    WHERE b.title = 'Advanced Potion-Making'
+    ORDER BY h.rank;
+
+    | name           | rank |
+    | -------------- | ---- |
+    | Terry Boot     | 1    |
+    | Cedric Diggory | 2    |
+
+    ---
+
+
+    - List all of the library patrons. If they have one or more books 
+    checked out, list the books with the patrons.
+
+    All Patron names and only books that are currently checked out.
+
+    SELECT patrons.name, books.title
+    FROM transactions
+    JOIN books ON (books.isbn = transactions.isbn
+    AND transactions.checked_out_date IS NOT NULL AND transactions.checked_in_date IS NULL)
+    RIGHT OUTER JOIN patrons ON transactions.patron_id = patrons.id
+    ORDER BY patrons.id;
+
+    | name             | title                                   |
+    | ---------------- | --------------------------------------- |
+    | Hermione Granger |                                         |
+    | Terry Boot       | Advanced Potion-Making                  |
+    | Padma Patil      |                                         |
+    | Cho Chang        |                                         |
+    | Cedric Diggory   | Fantastic Beasts and Where to Find Them |
+
+    ---
+
+    All Patron names and all books they ever checked out:
+
+    SELECT p.id, p.name, b.title
+    FROM patrons AS p
+    LEFT OUTER JOIN transactions AS t ON t.patron_id = p.id
+    LEFT OUTER JOIN books AS b ON b.isbn = t.isbn
+    ORDER BY p.id;
+
+    | id  | name             | title                                   |
+    | --- | ---------------- | --------------------------------------- |
+    | 1   | Hermione Granger | Fantastic Beasts and Where to Find Them |
+    | 1   | Hermione Granger | Hogwarts: A History                     |
+    | 2   | Terry Boot       | Advanced Potion-Making                  |
+    | 2   | Terry Boot       | Fantastic Beasts and Where to Find Them |
+    | 3   | Padma Patil      | Fantastic Beasts and Where to Find Them |
+    | 4   | Cho Chang        | Advanced Potion-Making                  |
+    | 5   | Cedric Diggory   | Fantastic Beasts and Where to Find Them |
+
+    ---
