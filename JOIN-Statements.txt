@@ -14,15 +14,15 @@ JOIN, and RIGHT OUTER JOIN. Give a real-world example for each.
 INNER JOIN: Returns records that have matching values in both tables. 
 
 Example: 
-OrderID	   CustomerID	EmployeeID	  OrderDate	     ShipperID
-10308	   2		    7		      1996-09-18	 3
-10309	   37		    3		      1996-09-19	 1
-10310	   77		    8		      1996-09-20	 2
+OrderID	 CustomerID	 EmployeeID	 OrderDate	  ShipperID
+10308	 2		     7		     1996-09-18	  3
+10309	 37		     3		     1996-09-19	  1
+10310	 77		     8		     1996-09-20	  2
 
-CustomerID	    CustomerName				         ContactName					Address	City	                           PostalCode	Country
-1		        Alfreds Futterkiste			         Maria Anders	                Obere Str. 57 Berlin		               12209		Germany
-2		        Ana Trujillo Emparedados y helados   Ana Trujillo	                Avda. de la Constitución 2222 México D.F.  05021		Mexico
-3		        Antonio Moreno Taquería	             Antonio Moreno	                Mataderos 2312 México D.F.	               05023		Mexico
+CustomerID	    CustomerName				         ContactName		Address	City	                           PostalCode	Country
+1		        Alfreds Futterkiste			         Maria Anders	    Obere Str. 57 Berlin		               12209		Germany
+2		        Ana Trujillo Emparedados y helados   Ana Trujillo	    Avda. de la Constitución 2222 México D.F.  05021		Mexico
+3		        Antonio Moreno Taquería	             Antonio Moreno	    Mataderos 2312 México D.F.	               05023		Mexico
 
 SELECT Orders.OrderID, Customers.CustomerName
 FROM Orders
@@ -37,10 +37,10 @@ OrderID   CustomerName
 LEFT OUTER JOIN: Return all records from the left table, and the matched records from the right table.
 
 Example:
-CustomerID	         CustomerName				          ContactName		Address	City	                            PostalCode	       Country
-1		             Alfreds Futterkiste			      Maria Anders	    Obere Str. 57 Berlin		                12209		       Germany
-2		             Ana Trujillo Emparedados y helados	  Ana Trujillo	    Avda. de la Constitución 2222 México D.F.	05021		       Mexico
-3		             Antonio Moreno Taquería	          Antonio Moreno	Mataderos 2312 México D.F.	                05023		       Mexico
+CustomerID	     CustomerName				          ContactName		Address	City	                            PostalCode	  Country
+1		         Alfreds Futterkiste			      Maria Anders	    Obere Str. 57 Berlin		                12209		  Germany
+2		         Ana Trujillo Emparedados y helados	  Ana Trujillo	    Avda. de la Constitución 2222 México D.F.	05021		  Mexico
+3		         Antonio Moreno Taquería	          Antonio Moreno	Mataderos 2312 México D.F.	                05023		  Mexico
 
 
 OrderID	CustomerID	EmployeeID	OrderDate	ShipperID
@@ -63,9 +63,9 @@ RIGHT OUTER JOIN: Return all records from the right table, and the matched recor
 
 Example:
 OrderID	CustomerID	EmployeeID	OrderDate	ShipperID
-10308	2		    7		    1996-09-18	3
+10308	2		    1		    1996-09-18	3
 10309	37		    3		    1996-09-19	1
-10310	77		    8		    1996-09-20	2
+10310	77		    2		    1996-09-20	2
 
 
 
@@ -81,9 +81,9 @@ ORDER BY Orders.OrderID;
 
 Return:
 OrderID	LastName	FirstName
-10308 	King 		Robert 
+10308 	Davalio 	Nancy
 10309 	Leverling 	Janet 
-10310 	Callahan 	Laura 
+10310 	Fuller 	    Andrew
 
 3. Define primary key and foreign key. Give a real-world example for each.
 
@@ -120,10 +120,11 @@ compensation.vacation_days FROM professor JOIN
 compensation ON professor.id =
 compensation.professor_id;
 
-SELECT professor.name, compensation.salary,
-compensation.vacation_days FROM professor as p
-JOIN compensation ON p.id =
-compensation.p_id;
+SELECT p.name, c.salary,
+c.vacation_days 
+FROM professor AS p
+JOIN compensation AS c
+ON p.id = c.professor_id;
 
 6. Why would you use a NATURAL JOIN? Give a real-world example.
 
@@ -157,8 +158,8 @@ information:
 
     SELECT employees.name, shifts.date, shifts.start_time, shifts.end_time
       FROM shifts
-      FULL JOIN scheduled_shifts ON shifts.id = scheduled_shifts.shift_id
-      FULL JOIN employees ON employees.id = scheduled_shifts.employee_id;
+      INNER JOIN scheduled_shifts ON shifts.id = scheduled_shifts.shift_id
+      INNER JOIN employees ON employees.id = scheduled_shifts.employee_id;
 
     Return:
         name        |    date    | start_time | end_time
